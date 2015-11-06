@@ -1,11 +1,12 @@
 package main
+
 import (
-"flag"
-"github.com/cloudfoundry/sonde-go/events"
-"github.com/gogo/protobuf/proto"
-	"log"
+	"flag"
 	"fmt"
-"net"
+	"github.com/cloudfoundry/sonde-go/events"
+	"github.com/gogo/protobuf/proto"
+	"log"
+	"net"
 	"time"
 )
 
@@ -37,41 +38,41 @@ func main() {
 }
 
 func sendLog(message, appID string) {
-	envelope := &events.Envelope {
+	envelope := &events.Envelope{
 		EventType: events.Envelope_LogMessage.Enum(),
 		Timestamp: proto.Int64(time.Now().UnixNano()),
-		Origin: proto.String(DEFAULT_ORIGIN),
-		LogMessage: &events.LogMessage {
+		Origin:    proto.String(DEFAULT_ORIGIN),
+		LogMessage: &events.LogMessage{
 			MessageType: events.LogMessage_OUT.Enum(),
-			Message: []byte(message),
-			Timestamp: proto.Int64(time.Now().UnixNano()),
-			AppId: proto.String(appID),
+			Message:     []byte(message),
+			Timestamp:   proto.Int64(time.Now().UnixNano()),
+			AppId:       proto.String(appID),
 		},
 	}
 	sendEnvelope(envelope)
 }
 
 func sendValue(name string, value float64, unit string) {
-	envelope := &events.Envelope {
+	envelope := &events.Envelope{
 		EventType: events.Envelope_ValueMetric.Enum(),
 		Timestamp: proto.Int64(time.Now().UnixNano()),
-		Origin: proto.String(DEFAULT_ORIGIN),
-		ValueMetric: &events.ValueMetric {
-			Name: proto.String(name),
+		Origin:    proto.String(DEFAULT_ORIGIN),
+		ValueMetric: &events.ValueMetric{
+			Name:  proto.String(name),
 			Value: proto.Float64(value),
-			Unit: proto.String(unit),
+			Unit:  proto.String(unit),
 		},
 	}
 	sendEnvelope(envelope)
 }
 
 func sendCounter(name string, delta uint64) {
-	envelope := &events.Envelope {
+	envelope := &events.Envelope{
 		EventType: events.Envelope_CounterEvent.Enum(),
 		Timestamp: proto.Int64(time.Now().UnixNano()),
-		Origin: proto.String(DEFAULT_ORIGIN),
-		CounterEvent: &events.CounterEvent {
-			Name: proto.String(name),
+		Origin:    proto.String(DEFAULT_ORIGIN),
+		CounterEvent: &events.CounterEvent{
+			Name:  proto.String(name),
 			Delta: proto.Uint64(delta),
 		},
 	}
